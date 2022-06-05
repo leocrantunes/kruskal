@@ -19,6 +19,9 @@ public final class App {
         grafo.adicionaAresta(4, 3, 6);
 
         imprimeGrafo(grafo);
+
+        LeitorInstancias leitorInstancias = new LeitorInstancias();
+        leitorInstancias.obtemGrafosCompletos();
     }
 
     static void imprimeGrafo(Grafo grafo) {
