@@ -1,38 +1,23 @@
 package br.unirio.edu.apa;
 
+import java.util.concurrent.TimeUnit;
+
 public final class App {
     private App() {
     }
 
     public static void main(String[] args) {
-        Grafo grafo = new Grafo(5);
+        long inicio = System.nanoTime();
+        GerenciadorInstancias leitorInstancias = new GerenciadorInstancias();
+        // Grafo grafoCompleto = leitorInstancias.obtemGrafoCompleto(0);
+        // grafoCompleto.imprimeGrafo();
+        long fim = System.nanoTime();
 
-        grafo.adicionaAresta(1, 0, 5);
-        grafo.adicionaAresta(2, 0, 4);
-        grafo.adicionaAresta(2, 1, 67);
-        grafo.adicionaAresta(3, 0, 26);
-        grafo.adicionaAresta(3, 2, 75);
-        grafo.adicionaAresta(3, 2, 38);
-        grafo.adicionaAresta(4, 0, 43);
-        grafo.adicionaAresta(4, 1, 43);
-        grafo.adicionaAresta(4, 2, 48);
-        grafo.adicionaAresta(4, 3, 6);
+        long tempoTotal = fim - inicio;
 
-        imprimeGrafo(grafo);
+        // TimeUnit
+        long tempoTotalSegundos = TimeUnit.MILLISECONDS.convert(tempoTotal, TimeUnit.NANOSECONDS);
 
-        LeitorInstancias leitorInstancias = new LeitorInstancias();
-        leitorInstancias.obtemGrafosCompletos();
-    }
-
-    static void imprimeGrafo(Grafo grafo) {
-        for (int i = 0; i < grafo.getNumVertices(); i++) {
-            System.out.println("Vertice " + i + ":");
-            Aresta aresta = grafo.getVertice(i).getArestaRaiz();
-            while (aresta != null) {
-                System.out.print(" -> " + aresta.getVertice() + "(" + aresta.getCusto() + ")");
-                aresta = aresta.getProxima();
-            }
-            System.out.println();
-        }
+        System.out.println(tempoTotalSegundos + " MILLISECONDS");
     }
 }
