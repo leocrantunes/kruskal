@@ -1,11 +1,11 @@
 package br.unirio.edu.apa;
 
-public class Aresta {
+public class Adjacencia {
     private int vertice;
     private int custo;
-    private Aresta proxima;
+    private Adjacencia proxima;
 
-    public Aresta(int vertice, int custo, Aresta proxima) {
+    public Adjacencia(int vertice, int custo, Adjacencia proxima) {
         this.setVertice(vertice);
         this.setCusto(custo);
         this.setProxima(proxima);
@@ -27,11 +27,11 @@ public class Aresta {
         this.custo = custo;
     }
 
-    public Aresta getProxima() {
+    public Adjacencia getProxima() {
         return this.proxima;
     }
 
-    public void setProxima(Aresta proxima) {
+    public void setProxima(Adjacencia proxima) {
         this.proxima = proxima;
     }
 }

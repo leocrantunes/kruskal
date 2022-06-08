@@ -80,10 +80,10 @@ public class GerenciadorInstancias {
     private Grafo criaGrafo(BufferedReader reader) throws IOException {
         reader.readLine(); // linha tipo de grafo
         int numVertices = obtemNumVertices(reader.readLine().trim());
-        int numArestas = obtemNumVertices(reader.readLine().trim());
+        int numArestas = obtemNumArestas(reader.readLine().trim());
         reader.readLine(); // linha lista de arestas e custos
 
-        Grafo grafo = new Grafo(numVertices);
+        Grafo grafo = new Grafo(numVertices, numArestas);
 
         // itera pelas linhas que declaram as arestas e adiona ao grafo
         for (int i = 0; i < numArestas; i++) {
@@ -110,6 +110,17 @@ public class GerenciadorInstancias {
         if (arrayNumVertices.length < 2) {
             throw new IllegalArgumentException(linha
                     + " não contém os dois elementos necessários (NB_NODES X) para incluir o número de vértices");
+        }
+
+        return Integer.parseInt(arrayNumVertices[1]);
+    }
+
+    private int obtemNumArestas(String linha) {
+        String[] arrayNumVertices = linha.split("\\s{2,}");
+
+        if (arrayNumVertices.length < 2) {
+            throw new IllegalArgumentException(linha
+                    + " não contém os dois elementos necessários (NB_EDGES X) para incluir o número de arestas");
         }
 
         return Integer.parseInt(arrayNumVertices[1]);
