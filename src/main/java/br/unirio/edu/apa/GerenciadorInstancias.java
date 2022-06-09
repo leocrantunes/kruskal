@@ -87,7 +87,7 @@ public class GerenciadorInstancias {
 
         // itera pelas linhas que declaram as arestas e adiona ao grafo
         for (int i = 0; i < numArestas; i++) {
-            adicionaAresta(reader.readLine().trim(), grafo);
+            adicionaAresta(reader.readLine().trim(), grafo, i);
         }
 
         return grafo;
@@ -126,7 +126,7 @@ public class GerenciadorInstancias {
         return Integer.parseInt(arrayNumVertices[1]);
     }
 
-    private void adicionaAresta(String linha, Grafo grafo) {
+    private void adicionaAresta(String linha, Grafo grafo, int indice) {
         String[] arrayArestas = linha.split("\\s{2,}");
 
         if (arrayArestas.length < 3) {
@@ -138,7 +138,8 @@ public class GerenciadorInstancias {
         int destino = Integer.parseInt(arrayArestas[1]);
         int custo = Integer.parseInt(arrayArestas[2]);
 
-        grafo.adicionaAresta(origem, destino, custo);
+        grafo.adicionaAdjacencia(origem, destino, custo);
+        grafo.adicionaAresta(indice, origem, destino, custo);
     }
 
     private File obtemArquivoInstancia(final String nomeArquivo) {
