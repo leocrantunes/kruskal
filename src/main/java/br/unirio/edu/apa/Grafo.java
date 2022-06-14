@@ -38,6 +38,10 @@ public class Grafo {
         origem.setProxima(novaAresta);
     }
 
+    public Aresta[] obtemListaArestas() {
+        return this.arestas;
+    }
+
     public void imprimeGrafo() {
         for (int i = 0; i < this.getNumVertices(); i++) {
             System.out.println("Vertice " + i + ":");

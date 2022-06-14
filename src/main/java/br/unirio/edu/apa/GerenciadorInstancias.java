@@ -37,6 +37,14 @@ public class GerenciadorInstancias {
         }
     }
 
+    public int obtemNumInstanciasGrafosCompletos() {
+        return this.instanciasGrafosCompletos.length;
+    }
+
+    public int obtemNumInstanciasGrafosEsparsos() {
+        return this.instanciasGrafosEsparsos.length;
+    }
+
     public Instancia obtemInstanciaGrafoCompleto(int indice) {
         return this.instanciasGrafosCompletos[indice];
     }

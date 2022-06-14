@@ -1,9 +1,13 @@
 package br.unirio.edu.apa;
 
-public class Aresta {
+public class Aresta implements Comparable<Aresta> {
     private int origem;
     private int destino;
     private int custo;
+
+    public Aresta() {
+        this(0, 0, 0);
+    }
 
     public Aresta(int origem, int destino, int custo) {
         this.origem = origem;
@@ -22,4 +26,9 @@ public class Aresta {
     public int getCusto() {
         return this.custo;
     }
+
+    public int compareTo(Aresta compareEdge) {
+        return this.custo - compareEdge.custo;
+    }
+
 }

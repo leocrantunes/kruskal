@@ -9,21 +9,37 @@ public final class App {
     }
 
     public static void main(String[] args) {
-        long inicio = System.nanoTime();
-        long inicioCpu = cpuTime();
         GerenciadorInstancias gerenciadorInstancias = new GerenciadorInstancias();
-        long fim = System.nanoTime();
-        long fimCpu = cpuTime();
+        int numCompletos = gerenciadorInstancias.obtemNumInstanciasGrafosCompletos();
 
-        // medindo tempo em clock-time
-        long tempoTotal = fim - inicio;
-        long tempoTotalSegundos = TimeUnit.MILLISECONDS.convert(tempoTotal, TimeUnit.NANOSECONDS);
-        System.out.println(tempoTotalSegundos + " MILLISECONDS");
+        Kruskal kruskal = new Kruskal();
+        KruskalOtimizado kruskalOtimizado = new KruskalOtimizado();
 
+        for (int i = 0; i < numCompletos; i++) {
+            Grafo g = gerenciadorInstancias.obtemGrafoCompleto(i);
+
+            long inicio = cpuTime();
+            long resultado = kruskal.executar(g);
+            long fim = cpuTime();
+            long tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
+            System.out.println("Instancia " + (i + 1) + " => Resultado: "
+                    + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
+
+            inicio = cpuTime();
+            resultado = kruskalOtimizado.executar(g);
+            fim = cpuTime();
+            tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
+            System.out.println("Instancia " + (i + 1) + " => Resultado 2: "
+                    + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
+        }
+    }
+
+    private static long calcularTempoCpuEmMilisegundos(long inicio, long fim) {
         // medindo tempo em CPU-time
-        long tempoTotalCpu = fimCpu - inicioCpu;
+        long tempoTotalCpu = fim - inicio;
         long tempoTotalCpuSegundos = TimeUnit.MILLISECONDS.convert(tempoTotalCpu, TimeUnit.NANOSECONDS);
-        System.out.println(tempoTotalCpuSegundos + " MILLISECONDS");
+
+        return tempoTotalCpuSegundos;
     }
 
     // referência:
