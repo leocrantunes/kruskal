@@ -10,8 +10,10 @@ public final class App {
 
     public static void main(String[] args) {
         long inicio = System.nanoTime();
+        long inicioCpu = cpuTime();
         GerenciadorInstancias gerenciadorInstancias = new GerenciadorInstancias();
         long fim = System.nanoTime();
+        long fimCpu = cpuTime();
 
         // medindo tempo em clock-time
         long tempoTotal = fim - inicio;
@@ -19,19 +21,18 @@ public final class App {
         System.out.println(tempoTotalSegundos + " MILLISECONDS");
 
         // medindo tempo em CPU-time
-        // precisamos dividir em threads para remover o tempo de leitura de instâncias
-        tempoTotal = cpuTime(Thread.currentThread());
-        tempoTotalSegundos = TimeUnit.MILLISECONDS.convert(tempoTotal, TimeUnit.NANOSECONDS);
-        System.out.println(tempoTotalSegundos + " MILLISECONDS");
+        long tempoTotalCpu = fimCpu - inicioCpu;
+        long tempoTotalCpuSegundos = TimeUnit.MILLISECONDS.convert(tempoTotalCpu, TimeUnit.NANOSECONDS);
+        System.out.println(tempoTotalCpuSegundos + " MILLISECONDS");
     }
 
     // referência:
     // https://www.javarticles.com/2016/02/java-thread-determining-cpu-time.html
-    private static long cpuTime(Thread thr) {
+    private static long cpuTime() {
         ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
         if (mxBean.isThreadCpuTimeSupported()) {
             try {
-                return mxBean.getThreadCpuTime(thr.getId());
+                return mxBean.getCurrentThreadCpuTime();
             } catch (UnsupportedOperationException e) {
                 System.out.println(e.toString());
             }
