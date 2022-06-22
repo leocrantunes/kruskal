@@ -26,4 +26,8 @@ public class Instancia {
     public Grafo obtemPrimeiroGrafo() {
         return this.grafos[0];
     }
+
+    public Grafo obtemGrafo(int i) {
+        return this.grafos[i];
+    }
 }

@@ -57,6 +57,10 @@ public class GerenciadorInstancias {
         return this.instanciasGrafosEsparsos[indice];
     }
 
+    public Grafo obtemGrafoEsparso(int indice, int indiceGrafo) {
+        return this.instanciasGrafosEsparsos[indice].obtemGrafo(indiceGrafo);
+    }
+
     public void inicializaInstancias(Instancia[] instancias, String nomePasta, String[] nomesArquivos) {
         for (int i = 0; i < instancias.length; i++) {
             String nomeArquivo = nomesArquivos[i];

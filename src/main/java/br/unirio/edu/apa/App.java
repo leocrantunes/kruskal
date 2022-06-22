@@ -32,6 +32,29 @@ public final class App {
             System.out.println("Instancia " + (i + 1) + " => Resultado 2: "
                     + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
         }
+
+        int numEsparsos = gerenciadorInstancias.obtemNumInstanciasGrafosEsparsos();
+
+        for (int i = 0; i < numEsparsos; i++) {
+            int numGrafos = gerenciadorInstancias.obtemInstanciaGrafoEsparso(i).obtemNumGrafos();
+            for (int j = 0; j < numGrafos; j++) {
+                Grafo g = gerenciadorInstancias.obtemGrafoEsparso(i, j);
+
+                long inicio = cpuTime();
+                long resultado = kruskal.executar(g);
+                long fim = cpuTime();
+                long tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
+                System.out.println("Instancia " + (i + 1) + " => Resultado: "
+                        + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
+
+                inicio = cpuTime();
+                resultado = kruskalOtimizado.executar(g);
+                fim = cpuTime();
+                tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
+                System.out.println("Instancia " + (i + 1) + " => Resultado 2: "
+                        + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
+            }
+        }
     }
 
     private static long calcularTempoCpuEmMilisegundos(long inicio, long fim) {
