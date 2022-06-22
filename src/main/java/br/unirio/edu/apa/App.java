@@ -22,15 +22,13 @@ public final class App {
             long resultado = kruskal.executar(g);
             long fim = cpuTime();
             long tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-            System.out.println("Instancia " + (i + 1) + " => Resultado 1: "
-                    + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
+            System.out.println((i + 1) + ",1," + resultado + "," + tempoTotalCpuSegundos);
 
             inicio = cpuTime();
             resultado = kruskalOtimizado.executar(g);
             fim = cpuTime();
             tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-            System.out.println("Instancia " + (i + 1) + " => Resultado 2: "
-                    + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
+            System.out.println((i + 1) + ",1," + resultado + "," + tempoTotalCpuSegundos);
         }
 
         int numEsparsos = gerenciadorInstancias.obtemNumInstanciasGrafosEsparsos();
@@ -44,15 +42,13 @@ public final class App {
                 long resultado = kruskal.executar(g);
                 long fim = cpuTime();
                 long tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-                System.out.println("Instancia " + (i + 1) + " Grafo " + (j + 1) + " => Resultado 1: "
-                        + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
+                System.out.println((i + 1) + "," + (j + 1) + "," + resultado + "," + tempoTotalCpuSegundos);
 
                 inicio = cpuTime();
                 resultado = kruskalOtimizado.executar(g);
                 fim = cpuTime();
                 tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-                System.out.println("Instancia " + (i + 1) + " Grafo " + (j + 1) + " => Resultado 2: "
-                        + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
+                System.out.println((i + 1) + "," + (j + 1) + "," + resultado + "," + tempoTotalCpuSegundos);
             }
         }
     }
@@ -60,7 +56,7 @@ public final class App {
     private static long calcularTempoCpuEmMilisegundos(long inicio, long fim) {
         // medindo tempo em CPU-time
         long tempoTotalCpu = fim - inicio;
-        long tempoTotalCpuSegundos = TimeUnit.MILLISECONDS.convert(tempoTotalCpu, TimeUnit.NANOSECONDS);
+        long tempoTotalCpuSegundos = TimeUnit.MICROSECONDS.convert(tempoTotalCpu, TimeUnit.NANOSECONDS);
 
         return tempoTotalCpuSegundos;
     }
