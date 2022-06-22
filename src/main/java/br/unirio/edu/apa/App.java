@@ -22,7 +22,7 @@ public final class App {
             long resultado = kruskal.executar(g);
             long fim = cpuTime();
             long tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-            System.out.println("Instancia " + (i + 1) + " => Resultado: "
+            System.out.println("Instancia " + (i + 1) + " => Resultado 1: "
                     + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
 
             inicio = cpuTime();
@@ -44,14 +44,14 @@ public final class App {
                 long resultado = kruskal.executar(g);
                 long fim = cpuTime();
                 long tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-                System.out.println("Instancia " + (i + 1) + " => Resultado: "
+                System.out.println("Instancia " + (i + 1) + " Grafo " + (j + 1) + " => Resultado 1: "
                         + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
 
                 inicio = cpuTime();
                 resultado = kruskalOtimizado.executar(g);
                 fim = cpuTime();
                 tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-                System.out.println("Instancia " + (i + 1) + " => Resultado 2: "
+                System.out.println("Instancia " + (i + 1) + " Grafo " + (j + 1) + " => Resultado 2: "
                         + resultado + ", Tempo: " + tempoTotalCpuSegundos + " MILLISECONDS");
             }
         }
