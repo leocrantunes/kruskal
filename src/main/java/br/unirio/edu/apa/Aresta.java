@@ -5,6 +5,9 @@ public class Aresta implements Comparable<Aresta> {
     private int destino;
     private int custo;
 
+    /**
+     * Inicializa aresta padrão com custo `0`.
+     */
     public Aresta() {
         this(0, 0, 0);
     }
@@ -27,6 +30,10 @@ public class Aresta implements Comparable<Aresta> {
         return this.custo;
     }
 
+    /**
+     * Utilizado quando o método sort é utilizado para comparar dois elementos
+     * Arestas com custo menor tem preferência.
+     */
     public int compareTo(Aresta compareEdge) {
         return this.custo - compareEdge.custo;
     }
