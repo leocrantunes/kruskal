@@ -21,14 +21,14 @@ public final class App {
             long inicio = cpuTime();
             long resultado = kruskal.executar(g);
             long fim = cpuTime();
-            long tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-            System.out.println((i + 1) + ",1," + resultado + "," + tempoTotalCpuSegundos);
+            long tempoTotalCpuMicrosegundos = calcularTempoCpuEmMicrosegundos(inicio, fim);
+            System.out.println((i + 1) + ",1," + resultado + "," + tempoTotalCpuMicrosegundos);
 
             inicio = cpuTime();
             resultado = kruskalOtimizado.executar(g);
             fim = cpuTime();
-            tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-            System.out.println((i + 1) + ",1," + resultado + "," + tempoTotalCpuSegundos);
+            tempoTotalCpuMicrosegundos = calcularTempoCpuEmMicrosegundos(inicio, fim);
+            System.out.println((i + 1) + ",1," + resultado + "," + tempoTotalCpuMicrosegundos);
         }
 
         int numEsparsos = gerenciadorInstancias.obtemNumInstanciasGrafosEsparsos();
@@ -41,24 +41,25 @@ public final class App {
                 long inicio = cpuTime();
                 long resultado = kruskal.executar(g);
                 long fim = cpuTime();
-                long tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-                System.out.println((i + 1) + "," + (j + 1) + "," + resultado + "," + tempoTotalCpuSegundos);
+                long tempoTotalCpuMicrosegundos = calcularTempoCpuEmMicrosegundos(inicio, fim);
+                System.out.println((i + 1) + "," + (j + 1) + "," + resultado + "," + tempoTotalCpuMicrosegundos);
 
                 inicio = cpuTime();
                 resultado = kruskalOtimizado.executar(g);
                 fim = cpuTime();
-                tempoTotalCpuSegundos = calcularTempoCpuEmMilisegundos(inicio, fim);
-                System.out.println((i + 1) + "," + (j + 1) + "," + resultado + "," + tempoTotalCpuSegundos);
+                tempoTotalCpuMicrosegundos = calcularTempoCpuEmMicrosegundos(inicio, fim);
+                System.out.println((i + 1) + "," + (j + 1) + "," + resultado + "," + tempoTotalCpuMicrosegundos);
             }
         }
     }
 
-    private static long calcularTempoCpuEmMilisegundos(long inicio, long fim) {
+    private static long calcularTempoCpuEmMicrosegundos(long inicio, long fim) {
         // medindo tempo em CPU-time
-        long tempoTotalCpu = fim - inicio;
-        long tempoTotalCpuSegundos = TimeUnit.MICROSECONDS.convert(tempoTotalCpu, TimeUnit.NANOSECONDS);
+        long tempoTotalCpuNanosegundos = fim - inicio;
+        long tempoTotalCpuMicrosegundos = TimeUnit.MICROSECONDS.convert(
+                tempoTotalCpuNanosegundos, TimeUnit.NANOSECONDS);
 
-        return tempoTotalCpuSegundos;
+        return tempoTotalCpuMicrosegundos;
     }
 
     // referência:
