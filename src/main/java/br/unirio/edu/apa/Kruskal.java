@@ -15,24 +15,28 @@ public class Kruskal {
         int numVertices = grafo.getNumVertices();
         Aresta arvoreGeradoraMinima[] = new Aresta[numVertices];
         int[] componentes = new int[numVertices];
-        int aresta = 0;
+        int aresta = 0, i = 0;
+
+        // inicializa árvore geradora mínima
+        for (i = 0; i < numVertices; ++i)
+            arvoreGeradoraMinima[i] = new Aresta();
 
         // obtém lista de arestas e ordena pelo menor custo
         Aresta[] arestas = grafo.obtemListaArestas();
         Arrays.sort(arestas);
 
         // inicializa array de componentes com os vértices
-        for (int i = 0; i < numVertices; i++)
+        for (i = 0; i < numVertices; i++)
             componentes[i] = i;
 
         // itera pelo conjunto de arestas e executa as operações union e find
-        for (int i = 0; i < arestas.length; i++) {
-            int conjunto1 = find(componentes, arestas[i].getOrigem());
-            int conjunto2 = find(componentes, arestas[i].getDestino());
-
-            // une os conjuntos somente se eles forem diferentes
+        i = 0;
+        while (aresta < numVertices - 1) {
+            Aresta proximaAresta = arestas[i++];
+            int conjunto1 = find(componentes, proximaAresta.getOrigem());
+            int conjunto2 = find(componentes, proximaAresta.getDestino());
             if (conjunto1 != conjunto2) {
-                arvoreGeradoraMinima[aresta++] = arestas[i];
+                arvoreGeradoraMinima[aresta++] = proximaAresta;
                 union(componentes, conjunto1, conjunto2, numVertices);
             }
         }
@@ -74,10 +78,8 @@ public class Kruskal {
     int calculaCustoMinimo(Aresta[] arvoreGeradoraMinima) {
         int custoMinimo = 0;
 
-        for (int i = 0; i < arvoreGeradoraMinima.length; i++) {
-            if (arvoreGeradoraMinima[i] != null)
-                custoMinimo += arvoreGeradoraMinima[i].getCusto();
-        }
+        for (int i = 0; i < arvoreGeradoraMinima.length; i++)
+            custoMinimo += arvoreGeradoraMinima[i].getCusto();
 
         return custoMinimo;
     }
