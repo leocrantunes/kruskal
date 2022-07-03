@@ -5,6 +5,13 @@ import java.util.Arrays;
 public class KruskalOtimizado {
 
     /**
+     * Estrutura auxiliar para armazenar subconjuntos de componentes
+     */
+    class Componente {
+        int verticePai, rank;
+    }
+
+    /**
      * Executa algoritmo de Kruskal utilizando estrutura de dados otimizada
      * 
      * @param grafo grafo
@@ -23,7 +30,9 @@ public class KruskalOtimizado {
 
         // inicializa array de componentes com os objetos de componentes
         for (int i = 0; i < numVertices; i++) {
-            componentes[i] = new Componente(i);
+            componentes[i] = new Componente();
+            componentes[i].verticePai = i;
+            componentes[i].rank = 0;
         }
 
         // itera pelo conjunto de arestas e executa as operações union e find
@@ -49,11 +58,11 @@ public class KruskalOtimizado {
      * @return nome do conjunto que contém o vértice
      */
     int find(Componente subsets[], int i) {
-        if (subsets[i].getVerticePai() != i) {
-            int verticePai = find(subsets, subsets[i].getVerticePai());
-            subsets[i].setVerticePai(verticePai);
+        if (subsets[i].verticePai != i) {
+            int verticePai = find(subsets, subsets[i].verticePai);
+            subsets[i].verticePai = verticePai;
         }
-        return subsets[i].getVerticePai();
+        return subsets[i].verticePai;
     }
 
     /**
@@ -68,13 +77,13 @@ public class KruskalOtimizado {
         int paiConjunto1 = find(componentes, c1);
         int paiConjunto2 = find(componentes, c2);
 
-        if (componentes[paiConjunto1].getRank() < componentes[paiConjunto2].getRank())
-            componentes[paiConjunto1].setVerticePai(paiConjunto2);
-        else if (componentes[paiConjunto1].getRank() > componentes[paiConjunto2].getRank())
-            componentes[paiConjunto2].setVerticePai(paiConjunto1);
+        if (componentes[paiConjunto1].rank < componentes[paiConjunto2].rank)
+            componentes[paiConjunto1].verticePai = paiConjunto2;
+        else if (componentes[paiConjunto1].rank > componentes[paiConjunto2].rank)
+            componentes[paiConjunto2].verticePai = paiConjunto1;
         else {
-            componentes[paiConjunto2].setVerticePai(paiConjunto1);
-            componentes[paiConjunto1].setRank(componentes[paiConjunto1].getRank() + 1);
+            componentes[paiConjunto2].verticePai = paiConjunto1;
+            componentes[paiConjunto1].rank++;
         }
     }
 
