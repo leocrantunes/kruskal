@@ -1,8 +1,13 @@
 package br.unirio.edu.apa;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.util.concurrent.TimeUnit;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public final class App {
     private App() {
@@ -15,51 +20,70 @@ public final class App {
         Kruskal kruskal = new Kruskal();
         KruskalOtimizado kruskalOtimizado = new KruskalOtimizado();
 
-        for (int i = 0; i < numCompletos; i++) {
-            Grafo g = gerenciadorInstancias.obtemGrafoCompleto(i);
+        for (int k = 1; k <= 10; k++) {
+            BufferedWriter bw = null;
+            try {
+                File arquivo = new File("rodada" + k + ".txt");
+                Files.deleteIfExists(Paths.get(arquivo.getAbsolutePath()));
+                arquivo.createNewFile();
 
-            long inicio = cpuTime();
-            long resultado = kruskal.executar(g);
-            long fim = cpuTime();
-            long tempoTotalCpuMicrosegundos = calcularTempoCpuEmMicrosegundos(inicio, fim);
-            System.out.println((i + 1) + ",1," + resultado + "," + tempoTotalCpuMicrosegundos);
+                FileWriter fw = new FileWriter(arquivo);
+                bw = new BufferedWriter(fw);
 
-            inicio = cpuTime();
-            resultado = kruskalOtimizado.executar(g);
-            fim = cpuTime();
-            tempoTotalCpuMicrosegundos = calcularTempoCpuEmMicrosegundos(inicio, fim);
-            System.out.println((i + 1) + ",1," + resultado + "," + tempoTotalCpuMicrosegundos);
-        }
+                for (int i = 0; i < numCompletos; i++) {
+                    Grafo g = gerenciadorInstancias.obtemGrafoCompleto(i);
 
-        int numEsparsos = gerenciadorInstancias.obtemNumInstanciasGrafosEsparsos();
+                    long inicio = cpuTime();
+                    long resultado = kruskal.executar(g);
+                    long fim = cpuTime();
+                    long tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
+                    bw.write((i + 1) + ";1;" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
 
-        for (int i = 0; i < numEsparsos; i++) {
-            int numGrafos = gerenciadorInstancias.obtemInstanciaGrafoEsparso(i).obtemNumGrafos();
-            for (int j = 0; j < numGrafos; j++) {
-                Grafo g = gerenciadorInstancias.obtemGrafoEsparso(i, j);
+                    inicio = cpuTime();
+                    resultado = kruskalOtimizado.executar(g);
+                    fim = cpuTime();
+                    tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
+                    bw.write((i + 1) + ";1;" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
+                }
 
-                long inicio = cpuTime();
-                long resultado = kruskal.executar(g);
-                long fim = cpuTime();
-                long tempoTotalCpuMicrosegundos = calcularTempoCpuEmMicrosegundos(inicio, fim);
-                System.out.println((i + 1) + "," + (j + 1) + "," + resultado + "," + tempoTotalCpuMicrosegundos);
+                int numEsparsos = gerenciadorInstancias.obtemNumInstanciasGrafosEsparsos();
 
-                inicio = cpuTime();
-                resultado = kruskalOtimizado.executar(g);
-                fim = cpuTime();
-                tempoTotalCpuMicrosegundos = calcularTempoCpuEmMicrosegundos(inicio, fim);
-                System.out.println((i + 1) + "," + (j + 1) + "," + resultado + "," + tempoTotalCpuMicrosegundos);
+                for (int i = 0; i < numEsparsos; i++) {
+                    int numGrafos = gerenciadorInstancias.obtemInstanciaGrafoEsparso(i).obtemNumGrafos();
+                    for (int j = 0; j < numGrafos; j++) {
+                        Grafo g = gerenciadorInstancias.obtemGrafoEsparso(i, j);
+
+                        long inicio = cpuTime();
+                        long resultado = kruskal.executar(g);
+                        long fim = cpuTime();
+                        long tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
+                        bw.write((i + 1) + ";" + (j + 1) + ";" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
+
+                        inicio = cpuTime();
+                        resultado = kruskalOtimizado.executar(g);
+                        fim = cpuTime();
+                        tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
+                        bw.write((i + 1) + ";" + (j + 1) + ";" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
+                    }
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            } finally {
+                try {
+                    if (bw != null)
+                        bw.close();
+                } catch (Exception ex) {
+                    System.out.println("Error in closing the BufferedWriter" + ex);
+                }
             }
         }
     }
 
-    private static long calcularTempoCpuEmMicrosegundos(long inicio, long fim) {
+    private static long calcularTempoCpuEmNanosegundos(long inicio, long fim) {
         // medindo tempo em CPU-time
         long tempoTotalCpuNanosegundos = fim - inicio;
-        long tempoTotalCpuMicrosegundos = TimeUnit.MICROSECONDS.convert(
-                tempoTotalCpuNanosegundos, TimeUnit.NANOSECONDS);
 
-        return tempoTotalCpuMicrosegundos;
+        return tempoTotalCpuNanosegundos;
     }
 
     // referência:
