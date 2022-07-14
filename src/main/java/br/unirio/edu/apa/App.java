@@ -50,8 +50,12 @@ public final class App {
 
                 for (int i = 0; i < numEsparsos; i++) {
                     int numGrafos = gerenciadorInstancias.obtemInstanciaGrafoEsparso(i).obtemNumGrafos();
+                    double soma = 0.0;
+                    int numVertices = 0;
                     for (int j = 0; j < numGrafos; j++) {
                         Grafo g = gerenciadorInstancias.obtemGrafoEsparso(i, j);
+                        soma += g.getNumArestas();
+                        numVertices = g.getNumVertices();
 
                         long inicio = cpuTime();
                         long resultado = kruskal.executar(g);
@@ -65,6 +69,7 @@ public final class App {
                         tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
                         bw.write((i + 1) + ";" + (j + 1) + ";" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
                     }
+                    System.out.println((i + 1) + ";" + numVertices + ";" + (soma / numGrafos));
                 }
             } catch (IOException ioe) {
                 ioe.printStackTrace();
