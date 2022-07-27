@@ -20,66 +20,91 @@ public final class App {
         Kruskal kruskal = new Kruskal();
         KruskalOtimizado kruskalOtimizado = new KruskalOtimizado();
 
-        for (int k = 1; k <= 10; k++) {
-            BufferedWriter bw = null;
-            try {
-                File arquivo = new File("rodada" + k + ".txt");
-                Files.deleteIfExists(Paths.get(arquivo.getAbsolutePath()));
-                arquivo.createNewFile();
+        BufferedWriter bw = null;
+        try {
+            File arquivo = new File("compilado.txt");
+            Files.deleteIfExists(Paths.get(arquivo.getAbsolutePath()));
+            arquivo.createNewFile();
 
-                FileWriter fw = new FileWriter(arquivo);
-                bw = new BufferedWriter(fw);
+            FileWriter fw = new FileWriter(arquivo);
+            bw = new BufferedWriter(fw);
 
+            // escrever cabeçalho
+            bw.write("rodada;numVertices;numArestas;resultado;tempoTotalCpuNanosegundos;tipoGrafo;algo\n");
+
+            for (int k = 0; k < 60; k++) {
+
+                int numVertices = 0;
+                int numArestas = 0;
                 for (int i = 0; i < numCompletos; i++) {
                     Grafo g = gerenciadorInstancias.obtemGrafoCompleto(i);
+                    numVertices = g.getNumVertices();
+                    numArestas = g.getNumArestas();
 
                     long inicio = cpuTime();
                     long resultado = kruskal.executar(g);
                     long fim = cpuTime();
                     long tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
-                    bw.write((i + 1) + ";1;" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
+                    bw.write((k + 1) + ";" + numVertices + ";" + numArestas + ";" + resultado + ";"
+                            + tempoTotalCpuNanosegundos + ";C;N\n");
 
                     inicio = cpuTime();
                     resultado = kruskalOtimizado.executar(g);
                     fim = cpuTime();
                     tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
-                    bw.write((i + 1) + ";1;" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
+                    bw.write((k + 1) + ";" + numVertices + ";" + numArestas + ";" + resultado + ";"
+                            + tempoTotalCpuNanosegundos + ";C;O\n");
                 }
 
                 int numEsparsos = gerenciadorInstancias.obtemNumInstanciasGrafosEsparsos();
 
                 for (int i = 0; i < numEsparsos; i++) {
                     int numGrafos = gerenciadorInstancias.obtemInstanciaGrafoEsparso(i).obtemNumGrafos();
-                    double soma = 0.0;
-                    int numVertices = 0;
+                    double somaArestas = 0.0;
+                    double somaResultadoNaoOtimizado = 0.0;
+                    double somaResultadoOtimizado = 0.0;
+                    double somaTempoNaoOtimizado = 0.0;
+                    double somaTempoOtimizado = 0.0;
+                    numVertices = 0;
+
                     for (int j = 0; j < numGrafos; j++) {
                         Grafo g = gerenciadorInstancias.obtemGrafoEsparso(i, j);
-                        soma += g.getNumArestas();
+                        somaArestas += g.getNumArestas();
                         numVertices = g.getNumVertices();
 
                         long inicio = cpuTime();
-                        long resultado = kruskal.executar(g);
+                        somaResultadoNaoOtimizado += kruskal.executar(g);
                         long fim = cpuTime();
-                        long tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
-                        bw.write((i + 1) + ";" + (j + 1) + ";" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
+                        somaTempoNaoOtimizado += calcularTempoCpuEmNanosegundos(inicio, fim);
 
                         inicio = cpuTime();
-                        resultado = kruskalOtimizado.executar(g);
+                        somaResultadoOtimizado += kruskalOtimizado.executar(g);
                         fim = cpuTime();
-                        tempoTotalCpuNanosegundos = calcularTempoCpuEmNanosegundos(inicio, fim);
-                        bw.write((i + 1) + ";" + (j + 1) + ";" + resultado + ";" + tempoTotalCpuNanosegundos + "\n");
+                        somaTempoOtimizado += calcularTempoCpuEmNanosegundos(inicio, fim);
                     }
-                    System.out.println((i + 1) + ";" + numVertices + ";" + (soma / numGrafos));
+
+                    double mediaArestas = somaArestas / numGrafos;
+
+                    double mediaResultadoNaoOtimizado = somaResultadoNaoOtimizado / numGrafos;
+                    double mediaResultadoOtimizado = somaResultadoOtimizado / numGrafos;
+
+                    double mediaTempoNaoOtimizado = somaTempoNaoOtimizado / numGrafos;
+                    double mediaTempoOtimizado = somaTempoOtimizado / numGrafos;
+
+                    bw.write((k + 1) + ";" + numVertices + ";" + mediaArestas + ";" + mediaResultadoNaoOtimizado + ";"
+                            + mediaTempoNaoOtimizado + ";E;N\n");
+                    bw.write((k + 1) + ";" + numVertices + ";" + mediaArestas + ";" + mediaResultadoOtimizado + ";"
+                            + mediaTempoOtimizado + ";E;O\n");
                 }
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            } finally {
-                try {
-                    if (bw != null)
-                        bw.close();
-                } catch (Exception ex) {
-                    System.out.println("Error in closing the BufferedWriter" + ex);
-                }
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } finally {
+            try {
+                if (bw != null)
+                    bw.close();
+            } catch (Exception ex) {
+                System.out.println("Error in closing the BufferedWriter" + ex);
             }
         }
     }
