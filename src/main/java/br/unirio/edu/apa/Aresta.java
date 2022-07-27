@@ -31,11 +31,10 @@ public class Aresta implements Comparable<Aresta> {
     }
 
     /**
-     * Utilizado quando o método sort é utilizado para comparar dois elementos
+     * Utilizado pelo método sort para comparar dois elementos
      * Arestas com custo menor tem preferência.
      */
-    public int compareTo(Aresta compareEdge) {
-        return this.custo - compareEdge.custo;
+    public int compareTo(Aresta arestaDestino) {
+        return this.custo - arestaDestino.custo;
     }
-
 }
