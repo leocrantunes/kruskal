@@ -9,11 +9,19 @@ import java.lang.management.ThreadMXBean;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public final class App {
+    // Creating a logger
+    private static Logger logger = LogManager.getLogger();
+
     private App() {
     }
 
     public static void main(String[] args) {
+        logger.info("Log started.");
+
         GerenciadorInstancias gerenciadorInstancias = new GerenciadorInstancias();
         int numCompletos = gerenciadorInstancias.obtemNumInstanciasGrafosCompletos();
 
@@ -33,10 +41,9 @@ public final class App {
             bw.write("rodada;numVertices;numArestas;resultado;tempoTotalCpuNanosegundos;tipoGrafo;algo\n");
 
             for (int k = 0; k < 60; k++) {
-
                 int numVertices = 0;
                 int numArestas = 0;
-                for (int i = 0; i < numCompletos; i++) {
+                for (int i = 0; i <= numCompletos; i++) {
                     Grafo g = gerenciadorInstancias.obtemGrafoCompleto(i);
                     numVertices = g.getNumVertices();
                     numArestas = g.getNumArestas();
@@ -99,7 +106,9 @@ public final class App {
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
-        } finally {
+        } catch (Exception e) {
+            logger.error("Something happened", e);
+        }finally {
             try {
                 if (bw != null)
                     bw.close();
@@ -107,6 +116,8 @@ public final class App {
                 System.out.println("Error in closing the BufferedWriter" + ex);
             }
         }
+
+        logger.info("Log finished.");
     }
 
     private static long calcularTempoCpuEmNanosegundos(long inicio, long fim) {
